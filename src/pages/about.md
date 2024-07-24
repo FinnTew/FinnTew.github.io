@@ -13,6 +13,12 @@ title: "About"
   <img src="/assets/dev.svg" class="sm:w-1/2 mx-auto" alt="coding dev illustration">
 </div>
 
-## Tech Stack
+## Recently Conducted
 
+- *CS144: Introduction to Computer Networking* 
+- *MIT6.824: Distributed Systems*
 
+## What's Next
+
+- *Talent Plan TinyKV Lab*
+- *CMU15-445: Database Systems*
