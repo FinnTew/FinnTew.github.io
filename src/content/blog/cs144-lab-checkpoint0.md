@@ -183,7 +183,7 @@ void get_URL(const string& host, const string& path)
 }
 ```
 
-## An in-memory reliable byte stream
+# An in-memory reliable byte stream
 
 这部分需要我们实现一个可靠的内存字节流, 要求如下: 
 
@@ -298,3 +298,44 @@ buffer_data_.push(std::move(data));
 
 最后看Output, `pop(uint64_t len)` 的处理, 和输入端不同的是是否关闭对输出没有影响, 流为空前都可以读, 同样, 弹出长度大于流中内容长度时把队列清空即可, 否则, 从队首取出字节直到长度等于`len`, 同时更新`count_bytes_popped_`和`buffer_view_`即可
 
+# 测试
+
+执行如下命令即可
+
+```bash
+cmake --build build --target check0 
+```
+
+测试结果:
+
+```bash
+╭─    ~/cs144-lab  on   main ⇡3 !4 ?2 ·················································································································· ✔  at 15:05:34  ─╮
+╰─ cmake --build build --target check0                                                                                                                                             ─╯
+Test project /home/Nanomoa/cs144-lab/build
+      Start  1: compile with bug-checkers
+ 1/10 Test  #1: compile with bug-checkers ........   Passed    0.23 sec
+      Start  2: t_webget
+ 2/10 Test  #2: t_webget .........................   Passed    1.11 sec
+      Start  3: byte_stream_basics
+ 3/10 Test  #3: byte_stream_basics ...............   Passed    0.01 sec
+      Start  4: byte_stream_capacity
+ 4/10 Test  #4: byte_stream_capacity .............   Passed    0.01 sec
+      Start  5: byte_stream_one_write
+ 5/10 Test  #5: byte_stream_one_write ............   Passed    0.01 sec
+      Start  6: byte_stream_two_writes
+ 6/10 Test  #6: byte_stream_two_writes ...........   Passed    0.01 sec
+      Start  7: byte_stream_many_writes
+ 7/10 Test  #7: byte_stream_many_writes ..........   Passed    0.03 sec
+      Start  8: byte_stream_stress_test
+ 8/10 Test  #8: byte_stream_stress_test ..........   Passed    0.07 sec
+      Start 37: compile with optimization
+ 9/10 Test #37: compile with optimization ........   Passed    0.10 sec
+      Start 38: byte_stream_speed_test
+             ByteStream throughput: 20.05 Gbit/s
+10/10 Test #38: byte_stream_speed_test ...........   Passed    0.07 sec
+
+100% tests passed, 0 tests failed out of 10
+
+Total Test time (real) =   1.65 sec
+Built target check0
+```
