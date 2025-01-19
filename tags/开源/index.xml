@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>开源 on FinnTew's Blog</title><link>https://finntew.github.io/tags/%E5%BC%80%E6%BA%90/</link><description>Recent content in 开源 on FinnTew's Blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Wed, 25 Dec 2024 21:00:14 +0800</lastBuildDate><atom:link href="https://finntew.github.io/tags/%E5%BC%80%E6%BA%90/index.xml" rel="self" type="application/rss+xml"/><item><title>开源贡献 - 参与开源项目初尝试</title><link>https://finntew.github.io/p/open-source-contribute-start/</link><pubDate>Wed, 25 Dec 2024 21:00:14 +0800</pubDate><guid>https://finntew.github.io/p/open-source-contribute-start/</guid><description>&lt;p>今天早上终于考完了该亖的操作系统期末，记录以下最近刚刚开始的开源贡献之旅 ～&lt;/p>
+&lt;p>如果以前大胆一些的话应该一年前就已经开始了吧（后悔实录&amp;hellip;逃）。&lt;/p>
+&lt;p>早在去年年末的时候就有机会参与开源，但因为自己说不清的技术恐惧一拖再拖，直到今年 10 月底才开始自己在 &lt;a class="link" href="https://github.com/apache/incubator-seata-go" target="_blank" rel="noopener"
+>Apache Seata-Go&lt;/a> 项目的第一次贡献。&lt;/p>
+&lt;p>&lt;img src="https://finntew.github.io/p/open-source-contribute-start/img1.jpg"
+width="944"
+height="1701"
+srcset="https://finntew.github.io/p/open-source-contribute-start/img1_hu10215478166746849744.jpg 480w, https://finntew.github.io/p/open-source-contribute-start/img1_hu3188031291164254953.jpg 1024w"
+loading="lazy"
+alt="Image 1"
+class="gallery-image"
+data-flex-grow="55"
+data-flex-basis="133px"
+>&lt;/p>
+&lt;p>刚开始参与进来大概只是因为年底找实习体验实在不好，想以此丰富一下简历，后来随着不断学习和贡献的过程，逐渐被社区氛围所吸引，开始意识到这本身就是一件非常有意义的事情。&lt;/p>
+&lt;h2 id="第一次贡献">第一次贡献
+&lt;/h2>&lt;p>开始的前几周只是参与了社区周会，并没有做什么实际的贡献，大多时间在熟悉代码和相关的 Samples 上。&lt;/p>
+&lt;p>直到 11.24 才第一次提交了代码，优化 &lt;code>buildLockKey&lt;/code> 的时间复杂度，因为基本没有和别的逻辑相关联，对于新手来说比较友好。&lt;/p>
+&lt;p>仅仅是通过预处理的方式将时间复杂度从 $O(N \times M \times K)$ 降低到 $O(N \times K)$ 。&lt;/p>
+&lt;p>&lt;img src="https://finntew.github.io/p/open-source-contribute-start/img2.png"
+width="862"
+height="656"
+srcset="https://finntew.github.io/p/open-source-contribute-start/img2_hu8202537909340447123.png 480w, https://finntew.github.io/p/open-source-contribute-start/img2_hu16208362154501913329.png 1024w"
+loading="lazy"
+alt="Image 2"
+class="gallery-image"
+data-flex-grow="131"
+data-flex-basis="315px"
+>&lt;/p>
+&lt;p>在这之后就是基本保持在一周提交一个 PR 的频率，做了一些简单的 bug fix 和 更新文档 的工作。&lt;/p>
+&lt;p>&lt;img src="https://finntew.github.io/p/open-source-contribute-start/img3.png"
+width="862"
+height="202"
+srcset="https://finntew.github.io/p/open-source-contribute-start/img3_hu10862284031619982837.png 480w, https://finntew.github.io/p/open-source-contribute-start/img3_hu16123049915874385533.png 1024w"
+loading="lazy"
+alt="Image 3"
+class="gallery-image"
+data-flex-grow="426"
+data-flex-basis="1024px"
+>&lt;/p>
+&lt;h2 id="参与实现的第一个-feature">参与实现的第一个 feature
+&lt;/h2>&lt;p>在最近几周社区开始了对 Saga 模式的支持，我也开始了自己的第一个 feature 任务：为 Saga 支持多类型配置。&lt;/p>
+&lt;p>&lt;img src="https://finntew.github.io/p/open-source-contribute-start/img4.png"
+width="859"
+height="542"
+srcset="https://finntew.github.io/p/open-source-contribute-start/img4_hu12603352535589256491.png 480w, https://finntew.github.io/p/open-source-contribute-start/img4_hu5012738161798101326.png 1024w"
+loading="lazy"
+alt="Image 4"
+class="gallery-image"
+data-flex-grow="158"
+data-flex-basis="380px"
+>&lt;/p>
+&lt;p>最初的想法是使用 &lt;code>Viper&lt;/code> 来支持，但是实现时发现 &lt;code>Viper&lt;/code> 在解析 &lt;code>json&lt;/code> 和 &lt;code>yaml&lt;/code> 时会自动的进行键名规范(模糊大小写，将其全部转化为小写)，但已有的 Saga StateMachine Parser 的实现是不模糊大小写的。&lt;/p>
+&lt;p>所以需要进行一些修改，交流确认后决定使用 &lt;code>encoding/json&lt;/code> 和 &lt;code>yaml.v3&lt;/code> 代替掉 &lt;code>Viper&lt;/code> 。&lt;/p>
+&lt;p>&lt;img src="https://finntew.github.io/p/open-source-contribute-start/img5.png"
+width="401"
+height="336"
+srcset="https://finntew.github.io/p/open-source-contribute-start/img5_hu9700371680986670903.png 480w, https://finntew.github.io/p/open-source-contribute-start/img5_hu10061246043966981651.png 1024w"
+loading="lazy"
+alt="Image 5"
+class="gallery-image"
+data-flex-grow="119"
+data-flex-basis="286px"
+>&lt;/p>
+&lt;p>然后需要对 State Machine Parser 进行简单调整以兼容两种格式，因为 &lt;code>encoding/json&lt;/code> 和 &lt;code>yaml.v3&lt;/code> 对数值的解析实现不同：&lt;/p>
+&lt;p>&lt;img src="https://finntew.github.io/p/open-source-contribute-start/img6.png"
+width="726"
+height="272"
+srcset="https://finntew.github.io/p/open-source-contribute-start/img6_hu15882208080198495246.png 480w, https://finntew.github.io/p/open-source-contribute-start/img6_hu10626230024044078603.png 1024w"
+loading="lazy"
+alt="Image 6"
+class="gallery-image"
+data-flex-grow="266"
+data-flex-basis="640px"
+>&lt;/p>
+&lt;p>之后修复了一些导致 State Machine Parser 解析失败的 bug，以及对 Config Parser 和 State Machine Parser 进行单测完善。&lt;/p>
+&lt;p>(由于最近期末周的原因，State Machine Parser 的单测还没有修改完善）等期末结束后写完提交再调整一下细节大概就结束力！&lt;/p>
+&lt;p>That&amp;rsquo;s all!&lt;/p></description></item></channel></rss>

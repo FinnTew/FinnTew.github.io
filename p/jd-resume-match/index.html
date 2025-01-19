@@ -1,0 +1,377 @@
+<!doctype html><html lang=en dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="课程设计项目 - 智能简历解析系统的实现记录"><title>课程设计 - 智能简历解析系统</title>
+<link rel=canonical href=https://finntew.github.io/p/jd-resume-match/><link rel=stylesheet href=/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css><meta property='og:title' content="课程设计 - 智能简历解析系统"><meta property='og:description' content="课程设计项目 - 智能简历解析系统的实现记录"><meta property='og:url' content='https://finntew.github.io/p/jd-resume-match/'><meta property='og:site_name' content="FinnTew's Blog"><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='C#'><meta property='article:tag' content='Python'><meta property='article:tag' content='BERT'><meta property='article:tag' content='课程设计'><meta property='article:published_time' content='2024-11-21T20:24:56+08:00'><meta property='article:modified_time' content='2024-11-21T20:24:56+08:00'><meta name=twitter:title content="课程设计 - 智能简历解析系统"><meta name=twitter:description content="课程设计项目 - 智能简历解析系统的实现记录"><link rel="shortcut icon" href=/favicon.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu9322438723177604927.png width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>💤</span></figure><div class=site-meta><h1 class=site-name><a href=/>FinnTew's Blog</a></h1><h2 class=site-description>Energy = Milk x Coffee²</h2></div></header><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#前言>前言</a></li><li><a href=#数据库设计>数据库设计</a></li><li><a href=#需求实现记录>需求实现记录</a><ol><li><a href=#简历导入与管理>简历导入与管理</a></li><li><a href=#简历解析与结构化>简历解析与结构化</a></li><li><a href=#简历匹配与筛选>简历匹配与筛选</a></li><li><a href=#数据分析与报告>数据分析与报告</a></li></ol></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><div class=article-title-wrapper><h2 class=article-title><a href=/p/jd-resume-match/>课程设计 - 智能简历解析系统</a></h2><h3 class=article-subtitle>课程设计项目 - 智能简历解析系统的实现记录</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Nov 21, 2024</time></div></footer></div></header><section class=article-content><h2 id=前言>前言</h2><p>果然，每次期末周临近的时候都会感觉全世界的 DDL 都突然吻了上来(厄厄&mldr;)。</p><p>先展示一下这次课设我的选题吧：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>智能简历解析系统
+</span></span><span class=line><span class=cl>1. 简历导入与管理
+</span></span><span class=line><span class=cl>（1）支持格式：系统应支持常见的简历格式，包括但不限于Word（.doc, .docx）、PDF和纯文本（.txt）。
+</span></span><span class=line><span class=cl>（2）导入方式：允许用户通过拖拽、点击上传等方式单个或批量提交简历。
+</span></span><span class=line><span class=cl>（3）存储与检索：可按导入日期，文件名称等方式查询简历。可根据用户的选择，打开并显示一份简历文件。
+</span></span><span class=line><span class=cl>2. 简历解析与结构化
+</span></span><span class=line><span class=cl>（1）内容提取：自动从简历中提取求职者信息，如姓名、联系方式、教育背景、工作经历、技能等。
+</span></span><span class=line><span class=cl>（2）数据结构化：为用户提供多种简历解析数据的格式，包括但不限于JSON、CSV、XML。
+</span></span><span class=line><span class=cl>（3）格式转换：支持将解析后的一种简历数据格式转换为其他格式。
+</span></span><span class=line><span class=cl>3. 简历匹配与筛选
+</span></span><span class=line><span class=cl>（1）关键词匹配：允许用户设定关键词，系统根据关键词自动筛选符合条件的简历。
+</span></span><span class=line><span class=cl>（2）语义匹配：利用NLP技术，实现简历与职位描述之间的语义匹配，提高筛选的准确性。
+</span></span><span class=line><span class=cl>（3）技能评估：根据求职者简历中的技能描述，评估其技能熟练度，并给出相应的评分。
+</span></span><span class=line><span class=cl>4. 数据分析与报告
+</span></span><span class=line><span class=cl>（1）统计分析：对简历数据进行统计分析，如求职者年龄分布、学历分布、技能分布等。
+</span></span><span class=line><span class=cl>（2）报告生成：提供可视化报告，以图表形式展示分析结果，并配以文字介绍。
+</span></span></code></pre></td></tr></table></div></div><p>还有另一个做 stp 零件仿真的选题，感觉对我来说太灾难了，遂放弃&mldr;</p><p>然后，点明表扬：整个项目里只需要保证至少 30% 的代码是 C# 实现即可！泰好！</p><h2 id=数据库设计>数据库设计</h2><p>我们结合需求 1-(3) 以及需求 2-(1) 即可确定我们的数据库怎么设计，具体需要存储一些什么内容。</p><p>首先我们需要一个主表，存储简历的基本特征，比如：</p><ul><li>上传时间，原文件名：方便检索</li><li>在服务器上的存储路径</li><li>文件格式：方便后续不同文件格式的内容读取</li><li>是否解析完成</li><li>解析后的json文本：方便后续人岗匹配</li></ul><p>然后就是一些从表了，比如：</p><ul><li>基本信息</li><li>教育经历</li><li>工作经历</li><li>技能</li><li>项目经历</li><li>&mldr;</li></ul><p>通过外键 <code>resume_id</code> 和主表关联。</p><p>后文会补充添加一些其他的表。</p><h2 id=需求实现记录>需求实现记录</h2><p>讲道理比较难实现的只有 解析和语义匹配 两部分，<code>NLP</code> 对非人工智能专业的鼠鼠还是太超前了。</p><h3 id=简历导入与管理>简历导入与管理</h3><p>这里需求(1)(2)可以放在一起考虑，首先考虑前端实现。</p><p>React的话可以使用 <code>useDropzone</code> Hook 实现拖拽上传以及文件格式限制。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=kr>const</span> <span class=nx>onDrop</span> <span class=o>=</span> <span class=nx>useCallback</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=p>(</span><span class=nx>acceptedFiles</span>: <span class=kt>File</span><span class=p>[],</span> <span class=nx>rejectedFiles</span>: <span class=kt>any</span><span class=p>[])</span> <span class=o>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nx>rejectedFiles</span><span class=p>.</span><span class=nx>length</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=nx>setError</span><span class=p>(</span><span class=s1>&#39;只支持 PDF、DOC、DOCX、TXT 格式的文件&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=nx>setTimeout</span><span class=p>(()</span> <span class=o>=&gt;</span> <span class=nx>setError</span><span class=p>(</span><span class=kc>null</span><span class=p>),</span> <span class=mi>3000</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=nx>onFileUpload</span><span class=p>(</span><span class=nx>acceptedFiles</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>},</span>
+</span></span><span class=line><span class=cl>    <span class=p>[</span><span class=nx>onFileUpload</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=p>{</span> <span class=nx>getRootProps</span><span class=p>,</span> <span class=nx>getInputProps</span><span class=p>,</span> <span class=nx>isDragActive</span> <span class=p>}</span> <span class=o>=</span> <span class=nx>useDropzone</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nx>onDrop</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nx>accept</span><span class=o>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=s1>&#39;application/pdf&#39;</span><span class=o>:</span> <span class=p>[</span><span class=s1>&#39;.pdf&#39;</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>            <span class=s1>&#39;application/msword&#39;</span><span class=o>:</span> <span class=p>[</span><span class=s1>&#39;.doc&#39;</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>            <span class=s1>&#39;application/vnd.openxmlformats-officedocument.wordprocessingml.document&#39;</span><span class=o>:</span> <span class=p>[</span><span class=s1>&#39;.docx&#39;</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>            <span class=s1>&#39;text/plain&#39;</span><span class=o>:</span> <span class=p>[</span><span class=s1>&#39;.txt&#39;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>        <span class=p>},</span>
+</span></span><span class=line><span class=cl>        <span class=nx>multiple</span>: <span class=kt>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nx>onDragEnter</span><span class=o>:</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=nx>setDragCount</span><span class=p>(</span><span class=nx>prev</span> <span class=o>=&gt;</span> <span class=nx>prev</span> <span class=o>+</span> <span class=mi>1</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>        <span class=nx>onDragLeave</span><span class=o>:</span> <span class=p>()</span> <span class=o>=&gt;</span> <span class=nx>setDragCount</span><span class=p>(</span><span class=nx>prev</span> <span class=o>=&gt;</span> <span class=nx>prev</span> <span class=o>-</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>);</span>
+</span></span></code></pre></td></tr></table></div></div><p>然后后端实现就比较简单了，遍历 <code>context.Request.Form.Files</code> 然后验证文件类型之后，保存文件到服务器上即可。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-C# data-lang=C#><span class=line><span class=cl><span class=kd>async</span> <span class=p>(</span><span class=n>HttpContext</span> <span class=n>context</span><span class=p>)</span> <span class=p>=&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kt>var</span> <span class=n>formFiles</span> <span class=p>=</span> <span class=n>context</span><span class=p>.</span><span class=n>Request</span><span class=p>.</span><span class=n>Form</span><span class=p>.</span><span class=n>Files</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>formFiles</span><span class=p>.</span><span class=n>Count</span> <span class=p>==</span> <span class=m>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=n>Results</span><span class=p>.</span><span class=n>Json</span><span class=p>(</span><span class=k>new</span> <span class=p>{</span> <span class=n>success</span> <span class=p>=</span> <span class=kc>false</span><span class=p>,</span> <span class=n>message</span> <span class=p>=</span> <span class=s>&#34;No files were uploaded.&#34;</span> <span class=p>},</span> <span class=n>statusCode</span><span class=p>:</span> <span class=n>StatusCodes</span><span class=p>.</span><span class=n>Status400BadRequest</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kt>string</span><span class=p>[]</span> <span class=n>supportedFormats</span> <span class=p>=</span> <span class=p>[</span><span class=s>&#34;.doc&#34;</span><span class=p>,</span> <span class=s>&#34;.docx&#34;</span><span class=p>,</span> <span class=s>&#34;.pdf&#34;</span><span class=p>,</span> <span class=s>&#34;.txt&#34;</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>    <span class=kt>var</span> <span class=n>uploadedFiles</span> <span class=p>=</span> <span class=k>new</span> <span class=n>List</span><span class=p>&lt;</span><span class=kt>string</span><span class=p>&gt;();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>foreach</span> <span class=p>(</span><span class=kt>var</span> <span class=n>formFile</span> <span class=k>in</span> <span class=n>formFiles</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 检查文件格式</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(!</span><span class=n>supportedFormats</span><span class=p>.</span><span class=n>Any</span><span class=p>(</span><span class=n>x</span> <span class=p>=&gt;</span> <span class=n>formFile</span><span class=p>.</span><span class=n>FileName</span><span class=p>.</span><span class=n>EndsWith</span><span class=p>(</span><span class=n>x</span><span class=p>,</span> <span class=n>StringComparison</span><span class=p>.</span><span class=n>OrdinalIgnoreCase</span><span class=p>)))</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=n>Results</span><span class=p>.</span><span class=n>Json</span><span class=p>(</span><span class=k>new</span> <span class=p>{</span> <span class=n>success</span> <span class=p>=</span> <span class=kc>false</span><span class=p>,</span> <span class=n>message</span> <span class=p>=</span> <span class=s>$&#34;Unsupported file format: {formFile.FileName}&#34;</span> <span class=p>},</span> <span class=n>statusCode</span><span class=p>:</span> <span class=n>StatusCodes</span><span class=p>.</span><span class=n>Status400BadRequest</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1>// 处理 &amp; 保存文件</span>
+</span></span><span class=line><span class=cl>        <span class=kt>var</span> <span class=n>fileExtension</span> <span class=p>=</span> <span class=n>Path</span><span class=p>.</span><span class=n>GetExtension</span><span class=p>(</span><span class=n>formFile</span><span class=p>.</span><span class=n>FileName</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=kt>var</span> <span class=n>timestamp</span> <span class=p>=</span> <span class=n>DateTime</span><span class=p>.</span><span class=n>Now</span><span class=p>.</span><span class=n>ToString</span><span class=p>(</span><span class=s>&#34;yyyyMMddHHmmssfff&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=kt>var</span> <span class=n>newFileName</span> <span class=p>=</span> <span class=s>$&#34;{Path.GetFileNameWithoutExtension(formFile.FileName)}-{timestamp}{fileExtension}&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=kt>var</span> <span class=n>filePath</span> <span class=p>=</span> <span class=n>Path</span><span class=p>.</span><span class=n>Combine</span><span class=p>(</span><span class=n>Directory</span><span class=p>.</span><span class=n>GetCurrentDirectory</span><span class=p>(),</span> <span class=s>&#34;Uploads&#34;</span><span class=p>,</span> <span class=n>newFileName</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>await</span> <span class=k>using</span> <span class=p>(</span><span class=kt>var</span> <span class=n>stream</span> <span class=p>=</span> <span class=k>new</span> <span class=n>FileStream</span><span class=p>(</span><span class=n>filePath</span><span class=p>,</span> <span class=n>FileMode</span><span class=p>.</span><span class=n>Create</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>await</span> <span class=n>formFile</span><span class=p>.</span><span class=n>CopyToAsync</span><span class=p>(</span><span class=n>stream</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1>// 存入数据库</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1>// 将解析任务置入消息队列</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>uploadedFiles</span><span class=p>.</span><span class=n>Add</span><span class=p>(</span><span class=n>newFileName</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>Results</span><span class=p>.</span><span class=n>Json</span><span class=p>(</span><span class=k>new</span> <span class=p>{</span> <span class=n>success</span> <span class=p>=</span> <span class=kc>true</span><span class=p>,</span> <span class=n>uploadedFiles</span> <span class=p>},</span> <span class=n>statusCode</span><span class=p>:</span> <span class=n>StatusCodes</span><span class=p>.</span><span class=n>Status200OK</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>消息队列这里在后面的解析部分详细解释。</p><p>然后需求(3)就很简单了，我们数据库里已经存储了上传时间，文件名这些用于检索的字段，检索时筛选一下时间区间内的行 or 模糊查询一下文件名字段即可。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sql data-lang=sql><span class=line><span class=cl><span class=c1>-- 按照时间筛选
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>SELECT</span><span class=w> </span><span class=o>*</span><span class=w> </span><span class=k>FROM</span><span class=w> </span><span class=n>resumes</span><span class=w> </span><span class=k>WHERE</span><span class=w> </span><span class=n>upload_date</span><span class=w> </span><span class=k>BETWEEN</span><span class=w> </span><span class=s1>&#39;开始时间&#39;</span><span class=w> </span><span class=k>AND</span><span class=w> </span><span class=s1>&#39;结束时间&#39;</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c1>-- 使用文件名查找
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>SELECT</span><span class=w> </span><span class=o>*</span><span class=w> </span><span class=k>FROM</span><span class=w> </span><span class=n>resumes</span><span class=w> </span><span class=k>WHERE</span><span class=w> </span><span class=n>file_name</span><span class=w> </span><span class=k>LIKE</span><span class=w> </span><span class=s1>&#39;%内容%&#39;</span><span class=p>;</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>可以进行一些简单的优化：</p><ul><li>比如为 <code>upload_date</code> 字段添加索引<div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sql data-lang=sql><span class=line><span class=cl><span class=k>ALTER</span><span class=w> </span><span class=k>TABLE</span><span class=w> </span><span class=n>resumes</span><span class=w> </span><span class=k>ADD</span><span class=w> </span><span class=k>INDEX</span><span class=w> </span><span class=n>idx_upload_date</span><span class=w> </span><span class=p>(</span><span class=n>upload_date</span><span class=p>);</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div></li><li>为 <code>file_name</code> 字段添加全文索引(这里其实并不太需要)<div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sql data-lang=sql><span class=line><span class=cl><span class=k>ALTER</span><span class=w> </span><span class=k>TABLE</span><span class=w> </span><span class=n>resumes</span><span class=w> </span><span class=k>ADD</span><span class=w> </span><span class=n>FULLTEXT</span><span class=p>(</span><span class=n>file_name</span><span class=p>);</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div>然后我们可以使用全文搜索代替原本的模糊查询<div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sql data-lang=sql><span class=line><span class=cl><span class=k>SELECT</span><span class=w> </span><span class=o>*</span><span class=w> </span><span class=k>FROM</span><span class=w> </span><span class=n>resumes</span><span class=w> </span><span class=k>WHERE</span><span class=w> </span><span class=k>MATCH</span><span class=p>(</span><span class=n>file_name</span><span class=p>)</span><span class=w> </span><span class=n>AGAINST</span><span class=p>(</span><span class=s1>&#39;内容&#39;</span><span class=w> </span><span class=k>IN</span><span class=w> </span><span class=k>NATURAL</span><span class=w> </span><span class=k>LANGUAGE</span><span class=w> </span><span class=k>MODE</span><span class=p>);</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div></li></ul><h3 id=简历解析与结构化>简历解析与结构化</h3><p>对于需求(1)的内容提取，查阅资料发现一般做法是使用 <code>NLP</code> 实现，对内容进行 <code>NER</code> 标识后做对应的提取工作。</p><p>感觉很难在 DDL 前速成并实现出来(悲)，所以我们这里另辟蹊径，给大模型提供相应的 <code>prompt</code>，让它帮我们完成解析工作，并严格规范其输出格式为 JSON。</p><p>这里我使用的 <code>prompt</code> 如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span><span class=lnt>75
+</span><span class=lnt>76
+</span><span class=lnt>77
+</span><span class=lnt>78
+</span><span class=lnt>79
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-markdown data-lang=markdown><span class=line><span class=cl>请阅读以下简历文本，提取并整理出以下信息，且尽可能的使用原文信息，并以 JSON 格式返回：
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>-</span> **个人信息**：姓名、手机号、邮箱、微信、博客、GitHub 等。
+</span></span><span class=line><span class=cl><span class=k>-</span> **教育经历**（数组）：每个元素包括学校名称、时间区间、专业等。   
+</span></span><span class=line><span class=cl><span class=k>-</span> **竞赛经历**（数组，可选）：每个元素包括竞赛名称、时间、奖项等。   
+</span></span><span class=line><span class=cl><span class=k>-</span> **项目经历**（数组）：每个元素包括项目名称、技术栈、时间、介绍、亮点等。   
+</span></span><span class=line><span class=cl><span class=k>-</span> **工作经历**（数组）：每个元素包括公司名称、职位、工作内容、时间等。   
+</span></span><span class=line><span class=cl><span class=k>-</span> **专业技能**（数组）：每个元素包括技能描述、熟练度等。   
+</span></span><span class=line><span class=cl><span class=k>-</span> **荣誉/证书**（数组，可选）：每个元素仅为一个荣誉/证书字符串。   
+</span></span><span class=line><span class=cl><span class=k>-</span> **技术栈标签**（数组，可选）：每个元素仅为一个技术名称字符串。
+</span></span><span class=line><span class=cl>   
+</span></span><span class=line><span class=cl><span class=gs>**要求**</span>：
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>-</span> 确保提取的信息准确无误。
+</span></span><span class=line><span class=cl><span class=k>-</span> 输出格式为 JSON。
+</span></span><span class=line><span class=cl><span class=k>-</span> 时间格式统一为 <span class=sb>`YYYY-MM`</span> 或 <span class=sb>`YYYY-MM-DD`</span>。
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl><span class=gs>**示例输出**</span>：
+</span></span><span class=line><span class=cl> 
+</span></span><span class=line><span class=cl>\`\`\`json
+</span></span><span class=line><span class=cl>{ 
+</span></span><span class=line><span class=cl>    &#34;personal_info&#34;: { 
+</span></span><span class=line><span class=cl>        &#34;name&#34;: &#34;张三&#34;, 
+</span></span><span class=line><span class=cl>        &#34;phone&#34;: &#34;13800000000&#34;,
+</span></span><span class=line><span class=cl>        &#34;email&#34;: &#34;zhangsan<span class=ni>@example</span>.com&#34;, 
+</span></span><span class=line><span class=cl>        &#34;wechat&#34;: &#34;zhangsan_wechat&#34;, 
+</span></span><span class=line><span class=cl>        &#34;blog&#34;: &#34;https://zhangsan.blog&#34;, 
+</span></span><span class=line><span class=cl>        &#34;github&#34;: &#34;https://github.com/zhangsan&#34; 
+</span></span><span class=line><span class=cl>    }, 
+</span></span><span class=line><span class=cl>    &#34;education&#34;: [ 
+</span></span><span class=line><span class=cl>        { 
+</span></span><span class=line><span class=cl>            &#34;school&#34;: &#34;清华大学&#34;, 
+</span></span><span class=line><span class=cl>            &#34;degree&#34;: &#34;本科&#34;, 
+</span></span><span class=line><span class=cl>            &#34;major&#34;: &#34;计算机科学&#34;, 
+</span></span><span class=line><span class=cl>            &#34;start_date&#34;: &#34;2015-09&#34;, 
+</span></span><span class=line><span class=cl>            &#34;end_date&#34;: &#34;2019-07&#34; 
+</span></span><span class=line><span class=cl>        } 
+</span></span><span class=line><span class=cl>    ], 
+</span></span><span class=line><span class=cl>    &#34;competitions&#34;: [ 
+</span></span><span class=line><span class=cl>        { 
+</span></span><span class=line><span class=cl>            &#34;name&#34;: &#34;ACM 国际大学生程序设计竞赛&#34;, 
+</span></span><span class=line><span class=cl>            &#34;date&#34;: &#34;2018-05&#34;, 
+</span></span><span class=line><span class=cl>            &#34;award&#34;: &#34;银牌&#34; 
+</span></span><span class=line><span class=cl>        } 
+</span></span><span class=line><span class=cl>    ], 
+</span></span><span class=line><span class=cl>    &#34;projects&#34;: [ 
+</span></span><span class=line><span class=cl>        { 
+</span></span><span class=line><span class=cl>            &#34;name&#34;: &#34;智能推荐系统&#34;, 
+</span></span><span class=line><span class=cl>            &#34;start_date&#34;: &#34;2019-08&#34;, 
+</span></span><span class=line><span class=cl>            &#34;end_date&#34;: &#34;2020-06&#34;, 
+</span></span><span class=line><span class=cl>            &#34;description&#34;: &#34;开发了一款基于机器学习的智能推荐系统。&#34;, 
+</span></span><span class=line><span class=cl>            &#34;highlights&#34;: &#34;提高了用户点击率20%&#34; 
+</span></span><span class=line><span class=cl>        } 
+</span></span><span class=line><span class=cl>    ], 
+</span></span><span class=line><span class=cl>    &#34;work_experience&#34;: [ 
+</span></span><span class=line><span class=cl>        { 
+</span></span><span class=line><span class=cl>            &#34;company&#34;: &#34;百度&#34;, 
+</span></span><span class=line><span class=cl>            &#34;position&#34;: &#34;高级研发工程师&#34;,
+</span></span><span class=line><span class=cl>            &#34;responsibilities&#34;: &#34;负责搜索算法的优化和维护。&#34;, 
+</span></span><span class=line><span class=cl>            &#34;start_date&#34;: &#34;2020-07&#34;, 
+</span></span><span class=line><span class=cl>            &#34;end_date&#34;: &#34;2023-10&#34; 
+</span></span><span class=line><span class=cl>        } 
+</span></span><span class=line><span class=cl>    ], 
+</span></span><span class=line><span class=cl>    &#34;skills&#34;: [ 
+</span></span><span class=line><span class=cl>        { 
+</span></span><span class=line><span class=cl>            &#34;skill&#34;: &#34;Python 编程&#34;,
+</span></span><span class=line><span class=cl>            &#34;proficiency&#34;: &#34;精通&#34; 
+</span></span><span class=line><span class=cl>        } 
+</span></span><span class=line><span class=cl>    ], 
+</span></span><span class=line><span class=cl>    &#34;certificates&#34;: [&#34;CET-4&#34;, &#34;CET-6&#34;], 
+</span></span><span class=line><span class=cl>    &#34;tech_tags&#34;: [&#34;Python&#34;, &#34;机器学习&#34;], 
+</span></span><span class=line><span class=cl>} 
+</span></span><span class=line><span class=cl>\`\`\`
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>以下是简历文本：
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>\`\`\`text
+</span></span><span class=line><span class=cl>{resumeContent}
+</span></span><span class=line><span class=cl>\`\`\`
+</span></span></code></pre></td></tr></table></div></div><p>测试了几次后发现效果还是不错的。</p><p>然后这里就有了一个新的问题，调用大模型做解析是一个比较耗时的操作，测试时大概需要 20s 左右才可以得到结果，显然让用户一直等待是不可取的。</p><p>所以在上个需求上传时我们将解析任务放入消息队列中等待，然后直接反馈结果给用户，将解析任务延迟到消费者中执行，这样用户就可以直接进行其他操作而非一直等待直到解析完成。</p><p>然后就是消费者的实现，比较显然了：</p><ol><li>调用大模型，等待响应</li><li>处理大模型输出</li><li>解析json</li><li>修改主表 <code>parsed</code> 字段，将json文本存入主表(方便后文语义匹配)</li><li>将解析后对应的内容存入对应的从表中</li></ol><p>4和5放在一个事务中执行即可。</p><p>然后格式转换这里也就比较简单了，因为我们主表中存储了json文本，所以直接查询主表后用一些工具库将json文本转换成别的格式(如csv, xml)即可。</p><h3 id=简历匹配与筛选>简历匹配与筛选</h3><p>先看需求(1)，这里我们使用 ElasticSearch 实现，每次项目启动时，将主表中 <code>parsed</code> 字段为 <code>true</code> 行的 <code>resume_id</code> 和 <code>parsed_data</code> 字段映射到 ElasticSearch 中，然后利用 ElasticSearch 的 bool 查询即可。</p><p>这里使用 must 匹配(必须和若干个关键词全部匹配)和 should 匹配(和关键词中的任意一个匹配即可)。</p><p>然后对匹配结果在主表中通过 <code>resume_id</code> 字段进行筛选展示即可。</p><p>然后对于需求(2)，我的实现是综合考虑文本相似度和结构化数据相似度，然后进行加权计算。</p><p>这里需要对岗位JD先进行解析，和简历解析实现方式基本一致，不多赘述了。</p><ul><li>文本语义匹配：我们将json处理为纯文本，然后利用 BERT 模型提取岗位JD和简历的语义向量，然后计算二者的余弦相似度，即可量化其语义相关性，注意对其归一化处理，余弦相似度取值范围为 [-1, 1]，我们对其进行归一化处理得到一个 [0, 1] 的值，值越大表示越相关。</li><li>结构化数据匹配：我们对岗位JD和简历中的学历，技能，工作经历等结构化信息，通过对比和比例得分的方式量化其匹配程度，同样的最后对其归一化处理，得到一个 [0, 1] 区间内的值。</li><li>最终加权计算：我们对上述两个值进行加权求和，得到一个 [0, 1] 区间内的值，值越大表示越相关，这里权的设置需要考虑二者哪个计算更准确，我这里的实现是 $ 0.6 \times TextSimilarity + 0.4 \times StructuredScore $，因为测试时结构化匹配的误差比语义相似度大的多。</li></ul><p>完整流程如下：</p><ol><li>数据加载 & 初始化<ul><li>解析resume和jd的json文本为字典格式</li><li>初始化模型和分词器<ul><li>加载停用词表，可以从这个仓库下载 <a class=link href=https://github.com/goto456/stopwords target=_blank rel=noopener>goto456/stopwords</a></li><li>初始化 jieba 分词器</li><li>初始化 BERT 模型，这里使用 <code>google-bert/bert-base-chinese</code></li></ul></li></ul></li><li>文本数据处理<ul><li>将resume 和 job 的 json 分别处理合并为两段纯文本，方便进行文本相似度计算</li><li>文本预处理：使用 jieba 分词器进行分词，去除停用词，并拼接为一个无空格的字符串
+示例：<div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>words</span> <span class=o>=</span> <span class=n>jieba</span><span class=o>.</span><span class=n>lcut</span><span class=p>(</span><span class=n>text</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>words</span> <span class=o>=</span> <span class=p>[</span><span class=n>word</span> <span class=k>for</span> <span class=n>word</span> <span class=ow>in</span> <span class=n>words</span> <span class=k>if</span> <span class=n>word</span> <span class=ow>not</span> <span class=ow>in</span> <span class=bp>self</span><span class=o>.</span><span class=n>stopwords</span> <span class=ow>and</span> <span class=n>word</span><span class=o>.</span><span class=n>strip</span><span class=p>()</span> <span class=o>!=</span> <span class=s1>&#39;&#39;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=k>return</span> <span class=s1>&#39;&#39;</span><span class=o>.</span><span class=n>join</span><span class=p>(</span><span class=n>words</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div></li></ul></li><li>文本相似度计算<ul><li>将预处理后的文本通过 BERT 编码，获取语义向量表示，提取 [CLS] token 的向量作为文本的语义表示
+示例：<div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>inputs</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>tokenizer</span><span class=p>(</span><span class=n>text</span><span class=p>,</span> <span class=n>return_tensors</span><span class=o>=</span><span class=s1>&#39;pt&#39;</span><span class=p>,</span> <span class=n>truncation</span><span class=o>=</span><span class=kc>True</span><span class=p>,</span> <span class=n>max_length</span><span class=o>=</span><span class=mi>512</span><span class=p>)</span><span class=o>.</span><span class=n>to</span><span class=p>(</span><span class=bp>self</span><span class=o>.</span><span class=n>device</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>outputs</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>bert_model</span><span class=p>(</span><span class=o>**</span><span class=n>inputs</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>sentence_vector</span> <span class=o>=</span> <span class=n>outputs</span><span class=o>.</span><span class=n>last_hidden_state</span><span class=p>[:,</span> <span class=mi>0</span><span class=p>,</span> <span class=p>:]</span><span class=o>.</span><span class=n>detach</span><span class=p>()</span><span class=o>.</span><span class=n>cpu</span><span class=p>()</span><span class=o>.</span><span class=n>numpy</span><span class=p>()[</span><span class=mi>0</span><span class=p>]</span>
+</span></span></code></pre></td></tr></table></div></div></li><li>计算余弦相似度，并归一化处理
+$$
+\text{TextSimilarity} = \frac{\frac{\vec{vec1} \cdot \vec{vec2}}{\|\vec{vec1}\| \cdot \|\vec{vec2}\|} + 1}{2}
+$$</li></ul></li><li>结构化数据匹配<ul><li>从学历，技能，工作经历等考虑匹配，计算得分，我这里只考虑了三个维度，设定满分为3，每个维度1分，最后计算比例得分得到一个 [0, 1] 的得分。</li><li>可以考虑尽可能多的维度，以获得更准确的匹配结果</li></ul></li><li>最终得分计算<ul><li>对文本相似度和结构化数据匹配的得分进行加权计算，得到最终的匹配得分
+$$
+\text{Score} = 0.6 \times \text{TextSimilarity} + 0.4 \times \text{StructuredScore}
+$$</li></ul></li></ol><p>最后的技能评估可以直接map映射一下 {熟练度,分数} 即可，因为json文本里已经很清楚了，这里不多赘述了。</p><h3 id=数据分析与报告>数据分析与报告</h3><p>这部分也比较简单，可以使用一些图表展示库进行可视化报告，比如 <code>echarts</code>。</p><p>后端只需要计算一下总数和不同类别的数量，向前端发送一个json描述这些信息，然后前端使用 <code>echarts</code> 进行展示即可。</p><p>文本描述可以使用老配方(bushi)，调用大模型即可，prompt大法好！</p><p><strong>That&rsquo;s all!</strong></p></section><footer class=article-footer><section class=article-tags><a href=/tags/c%23/>C#</a>
+<a href=/tags/python/>Python</a>
+<a href=/tags/bert/>BERT</a>
+<a href=/tags/%E8%AF%BE%E7%A8%8B%E8%AE%BE%E8%AE%A1/>课程设计</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css integrity=sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js integrity=sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js integrity=sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05 crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}],ignoredClasses:["gist"]})})</script></article><link rel=stylesheet href=https://unpkg.com/vssue/dist/vssue.min.css><div id=vssue></div><script src=https://unpkg.com/vue@2/dist/vue.runtime.min.js></script><script src=https://unpkg.com/vssue/dist/vssue.github.min.js></script><script>new Vue({el:"#vssue",render:e=>e("Vssue",{props:{title:"课程设计 - 智能简历解析系统",options:{autoCreateIssue:!0,owner:"FinnTew",repo:"blog-comments",clientId:"Ov23liKS3gJoM4gkl7fL",clientSecret:"1f652d3a84fa45475ff7ffe25e89dc72cf9434af"}}})})</script><footer class=site-footer><section class=copyright>&copy;
+2024 -
+2025 FinnTew's Blog</section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.29.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>
