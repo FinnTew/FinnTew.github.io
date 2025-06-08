@@ -77,7 +77,7 @@ enabled = true
 ## Comments
 [comments]
 enabled = true
-provider = "disqus"
+provider = "utterances"
 
 [comments.disqusjs]
 shortname = ""
@@ -87,9 +87,9 @@ admin = ""
 adminLabel = ""
 
 [comments.utterances]
-repo = ""
+repo = "FinnTew/FinnTew.github.io"
 issueTerm = "pathname"
-label = ""
+label = "Comment"
 
 [comments.remark42]
 host = ""
